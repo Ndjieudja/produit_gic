@@ -1,0 +1,53 @@
+<odoo>
+    <data>
+
+        <!--      Definition de la vue form       -->
+        <record id="view_form_gic" model="ir.ui.view">
+            <field name="name">gic_view_form</field>
+            <field name="model">gic.gic</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="etat_produit" required="1"/>
+                            <field name="info_produit"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!--    list view definition        -->
+        <record model="ir.ui.view" id="gic_view_tree">
+            <field name="name">gic_view_tree</field>
+            <field name="model">gic.gic</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="info_produit"/>
+                    <field name="etat_produit"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- actions opening views on models -->
+        <record model="ir.actions.act_window" id="gic.action_window">
+            <field name="name">Gic</field>
+            <field name="res_model">gic.gic</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Create the first record here</p>
+            </field>
+        </record>
+
+        <!--     Top menu item-->
+        <menuitem name="Gic" id="gic.menu_root" action="gic.action_window"/>
+
+    </data>
+</odoo>

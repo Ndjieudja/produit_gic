@@ -1,0 +1,60 @@
+<odoo>
+    <data>
+        <template id="report_stat_gic">
+            <t t-if="not o" t-set="o" t-value="doc"/>
+
+            <t t-if="not company">
+                <t t-if="company_id">
+                    <t t-set="company" t-value="company_id"/>
+                </t>
+                <t t-elif="o and 'company_id' in o">
+                    <t t-set="company" t-value="o.company_id.sudo()"/>
+                </t>
+                <t t-else="else">
+                    <t t-set="company" t-value="res_company"/>
+                </t>
+            </t>
+            <t t-set="o" t-value="o.with_context(lang=lang)"/>
+            <div class="page">
+                <table>
+                    <thead>
+                        <tr style="font-size:24px;">
+                            <th style="border:2px solid black">Frais</th>
+                            <th style="border:2px solid black">Recent</th>
+                            <th style="border:2px solid black">Flerit</th>
+                        </tr>
+                    </thead>
+                </table>
+<!--                <tbody>-->
+<!--                    <t t-foreach="o." t-as="items">-->
+<!--                        <tr>-->
+<!--                            <td style="text-align:center">-->
+<!--                                <t t-esc="items[0]"/>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                    </t>-->
+<!--                </tbody>-->
+            </div>
+        </template>
+
+
+        <template id="gic_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.create_uid.lang "/>
+                    <t t-call="gic.report_stat_gic" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+
+        <report
+                id="report_report_gic"
+                string="Gic_Report"
+                model="gic.gic"
+                report_type="qweb-pdf"
+                file="gic.gic_template"
+                name="gic.gic_template"
+        />
+
+    </data>
+</odoo>

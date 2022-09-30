@@ -1,0 +1,81 @@
+<odoo>
+    <data>
+        <template id="report_gic">
+            <t t-if="not o" t-set="o" t-value="doc"/>
+
+            <t t-if="not company">
+                <t t-if="company_id">
+                    <t t-set="company" t-value="company_id"/>
+                </t>
+                <t t-elif="o and 'company_id' in o">
+                    <t t-set="company" t-value="o.company_id.sudo()"/>
+                </t>
+                <t t-else="else">
+                    <t t-set="company" t-value="res_company"/>
+                </t>
+            </t>
+            <t t-set="o" t-value="o.with_context(lang=lang)"/>
+            <div class="page" style="margin-top:100px;position:relative">
+                <div class="article" style="margin-top:20px;">
+                    <div class="row" style="font-size:11px">
+                        <div class="col-12">
+                            <table class="table table-sm o_main_table" style="padding-bottom:1em">
+                                <thead>
+                                    <tr>
+                                        <th style="border:2px solid black">Name</th>
+                                        <th style="border:2px solid black">Etat</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="o.print_etat()" t-as="items">
+                                        <tr>
+                                            <td style="text-align:center">
+                                                <t t-esc="items[0]"/>
+                                            </td>
+                                            <td><t t-esc="items[1]"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+
+        <template id="gic_template">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.create_uid.lang "/>
+                    <t t-call="gic.report_gic" t-lang="lang"/>
+                </t>
+            </t>
+        </template>
+
+        <report
+                id="report_report_gic"
+                string="Gic-Card"
+                model="gic.gic"
+                report_type="qweb-pdf"
+                file="gic.gic_template"
+                name="gic.gic_template"
+                print_report_name="'%s-%s'%(object.name,object.create_date)"
+        />
+
+        <record id="paper_fn" model="report.paperformat">
+            <field name="name">A4_fn</field>
+            <field name="format">custom</field>
+            <field name="page_height">350</field>
+            <field name="page_width">125</field>
+            <field name="margin_top">0</field>
+            <field name="margin_bottom">2</field>
+            <field name="margin_left">2</field>
+            <field name="margin_right">2</field>
+            <field name="orientation">Portrait</field>
+
+        </record>
+
+
+    </data>
+</odoo>
